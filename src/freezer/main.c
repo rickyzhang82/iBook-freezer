@@ -2,7 +2,8 @@
 #include <IOKit/IOKitLib.h>
 #include "I2CUserClient.h"
 
-#define kIONameMatchHWSensor "IOHWSensor" //AppleI2C kext IO name match
+#define kIONameMatchHWSensor "IOHWSensor" //IOHWSensor name match
+#define kIONameMatchPPCI2C "i2c" //PPCI2C name match
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -62,7 +63,10 @@ void printServiceInfo(const void* serviceDict, CFStringEncoding encoding) {
 	}
 }
 
-int main (int argc, const char * argv[]) {
+/**
+ * Poll I/O hardware sensor reading
+ */
+void pollIOHardwareSensor() {
     io_iterator_t       iter;
     io_service_t        service = 0;
     kern_return_t       kr;
@@ -85,6 +89,30 @@ int main (int argc, const char * argv[]) {
             printServiceInfo(serviceDict, systemEncoding);
         CFRelease(serviceDict);
         IOObjectRelease(service);
+    }
+	
+	IOObjectRelease(iter);
+}
+
+int main (int argc, const char * argv[]) {
+    io_iterator_t       iter;
+    io_service_t        service = 0;
+    kern_return_t       kr;
+    CFMutableDictionaryRef serviceDict;
+    CFStringEncoding       systemEncoding = CFStringGetSystemEncoding();
+
+	// Create an iterator for all IO Registry objects that match the dictionary
+    kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
+                                       IOServiceNameMatching(kIONameMatchPPCI2C), &iter);
+    if(kr != KERN_SUCCESS) {
+        fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kr);
+        return -1;
+    }
+
+    // Iterate over all matching objects
+    while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
+        printf("Found device "kIONameMatchPPCI2C" !\n\n");
+		IOObjectRelease(service);
     }
 	
 	IOObjectRelease(iter);
