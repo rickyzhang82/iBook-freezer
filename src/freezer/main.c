@@ -38,42 +38,42 @@ void printServiceInfo(const void* serviceDict, CFStringEncoding encoding) {
     sensorValue = CFDictionaryGetValue((CFDictionaryRef)serviceDict,
                                        CFSTR(kIOPPluginCurrentValueKey));
 
-	(void)CFNumberGetValue(sensorValue, kCFNumberSInt32Type,
+    (void)CFNumberGetValue(sensorValue, kCFNumberSInt32Type,
                            (void *)&currentValue);
-						   
+                           
     if (CFStringCompare(sensorType, CFSTR(kIOPPluginTypeTempSensor), 0) ==
             kCFCompareEqualTo) {
         printf("%24s %15s %7.1f C %9.1f F\n",
                // see documentation for CFStringGetCStringPtr() caveat
                CFStringGetCStringPtr(sensorLocation, encoding),
-			   CFStringGetCStringPtr(sensorType, encoding),
+               CFStringGetCStringPtr(sensorType, encoding),
                SENSOR_TEMP_FMT_C(currentValue),
                SENSOR_TEMP_FMT_F(currentValue));
     } else if(CFStringCompare(sensorType, CFSTR(kIOPPluginTypeVoltSensor), 0) ==
-            kCFCompareEqualTo){
+              kCFCompareEqualTo){
         printf("%24s %15s %7.3f V\n",
                CFStringGetCStringPtr(sensorLocation, encoding), 
-			   CFStringGetCStringPtr(sensorType, encoding),
-			   SENSOR_VOLT_FMT(currentValue));
+               CFStringGetCStringPtr(sensorType, encoding),
+               SENSOR_VOLT_FMT(currentValue));
     }else {
-		printf("%24s %15s %7ld\n",
+        printf("%24s %15s %7ld\n",
                CFStringGetCStringPtr(sensorLocation, encoding), 
-			   CFStringGetCStringPtr(sensorType, encoding),
-			   currentValue);
-	}
+               CFStringGetCStringPtr(sensorType, encoding),
+               currentValue);
+    }
 }
 
 /**
  * Poll I/O hardware sensor reading
  */
 void pollIOHardwareSensor() {
-    io_iterator_t       iter;
-    io_service_t        service = 0;
-    kern_return_t       kr;
-    CFMutableDictionaryRef serviceDict;
-    CFStringEncoding       systemEncoding = CFStringGetSystemEncoding();
+    io_iterator_t           iter;
+    io_service_t            service = 0;
+    kern_return_t           kr;
+    CFMutableDictionaryRef  serviceDict;
+    CFStringEncoding        systemEncoding = CFStringGetSystemEncoding();
 
-	// Create an iterator for all IO Registry objects that match the dictionary
+    // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
                                        IOServiceMatching(kIONameMatchHWSensor), &iter);
     if(kr != KERN_SUCCESS) {
@@ -90,18 +90,18 @@ void pollIOHardwareSensor() {
         CFRelease(serviceDict);
         IOObjectRelease(service);
     }
-	
-	IOObjectRelease(iter);
+    
+    IOObjectRelease(iter);
 }
 
 int main (int argc, const char * argv[]) {
-    io_iterator_t       iter;
-    io_service_t        service = 0;
-    kern_return_t       kr;
-    CFMutableDictionaryRef serviceDict;
-    CFStringEncoding       systemEncoding = CFStringGetSystemEncoding();
+    io_iterator_t           iter;
+    io_service_t            service = 0;
+    kern_return_t           kr;
+    CFMutableDictionaryRef  serviceDict;
+    CFStringEncoding        systemEncoding = CFStringGetSystemEncoding();
 
-	// Create an iterator for all IO Registry objects that match the dictionary
+    // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
                                        IOServiceNameMatching(kIONameMatchPPCI2C), &iter);
     if(kr != KERN_SUCCESS) {
@@ -112,10 +112,10 @@ int main (int argc, const char * argv[]) {
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
         printf("Found device "kIONameMatchPPCI2C" !\n\n");
-		IOObjectRelease(service);
+        IOObjectRelease(service);
     }
-	
-	IOObjectRelease(iter);
+    
+    IOObjectRelease(iter);
 
     return 0;
 }
