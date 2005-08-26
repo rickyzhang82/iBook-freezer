@@ -2,8 +2,10 @@
 #include <IOKit/IOKitLib.h>
 #include "I2CUserClient.h"
 
-#define kIONameMatchHWSensor "IOHWSensor" //IOHWSensor name match
+#define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONameMatchPPCI2C "i2c" //PPCI2C name match
+#define kIOClassKey "IOClass"
+#define kIOClassValuePPCI2CInterface "PPCI2CInterface"
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -22,7 +24,12 @@
 #define SENSOR_TEMP_FMT_F(x) \
     (double)((((double)((x) >> 16) * (double)9) / (double)5) + (double)32)
 
-void printServiceInfo(const void* serviceDict, CFStringEncoding encoding) {
+/**
+ * @brief printSensorsInfo
+ * @param serviceDict
+ * @param encoding
+ */
+void printSensorsInfo(const void* serviceDict, CFStringEncoding encoding) {
     SInt32      currentValue;
     CFNumberRef sensorValue;
     CFStringRef sensorType, sensorLocation;
@@ -64,9 +71,9 @@ void printServiceInfo(const void* serviceDict, CFStringEncoding encoding) {
 }
 
 /**
- * Poll I/O hardware sensor reading
+ * @brief pollIOHWSensor Poll I/O hardware sensor reading
  */
-void pollIOHardwareSensor() {
+void pollIOHWSensor() {
     io_iterator_t           iter;
     io_service_t            service = 0;
     kern_return_t           kr;
@@ -75,7 +82,7 @@ void pollIOHardwareSensor() {
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
-                                       IOServiceMatching(kIONameMatchHWSensor), &iter);
+                                       IOServiceMatching(kIOHWSensor), &iter);
     if(kr != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kr);
         return -1;
@@ -86,7 +93,7 @@ void pollIOHardwareSensor() {
         kr = IORegistryEntryCreateCFProperties(service, &serviceDict,
                  kCFAllocatorDefault, kNilOptions);
         if (kr == KERN_SUCCESS)
-            printServiceInfo(serviceDict, systemEncoding);
+            printSensorsInfo(serviceDict, systemEncoding);
         CFRelease(serviceDict);
         IOObjectRelease(service);
     }
@@ -94,16 +101,26 @@ void pollIOHardwareSensor() {
     IOObjectRelease(iter);
 }
 
-int main (int argc, const char * argv[]) {
+/**
+ * @brief pollADT746XChipViaI2C
+ */
+void pollADT746XChipViaI2C() {
     io_iterator_t           iter;
     io_service_t            service = 0;
     kern_return_t           kr;
     CFMutableDictionaryRef  serviceDict;
     CFStringEncoding        systemEncoding = CFStringGetSystemEncoding();
+    CFMutableDictionaryRef  matchingDictionary;
+
+    // Create PPC I2C interface matching dictionary
+    matchingDictionary = IOServiceNameMatching(kIONameMatchPPCI2C);
+    // Add a key value pair: (IOClass, PPCI2CInterface) to further filter
+    CFDictionaryAddValue(matchingDictionary, CFSTR(kIOClassKey),
+                         CFSTR(kIOClassValuePPCI2CInterface));
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
-                                       IOServiceNameMatching(kIONameMatchPPCI2C), &iter);
+                                       matchingDictionary, &iter);
     if(kr != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kr);
         return -1;
@@ -111,11 +128,19 @@ int main (int argc, const char * argv[]) {
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
-        printf("Found device "kIONameMatchPPCI2C" !\n\n");
+        printf("Found I2C controller with class name "kIOClassValuePPCI2CInterface" matched!\n\n");
         IOObjectRelease(service);
     }
-    
+
     IOObjectRelease(iter);
 
+    return 0;
+}
+
+int main (int argc, const char * argv[]) {
+    printf("Poll from IOHWSensor:\n");
+    pollIOHWSensor();
+    printf("Poll from I2C bus:\n");
+    pollADT746XChipViaI2C();
     return 0;
 }
