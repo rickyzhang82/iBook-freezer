@@ -12,14 +12,14 @@ int main (int argc, const char * argv[]) {
 
     // Create a matching dictionary that will find PPC I2C interface user client
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &iter);
-    if(kr !== KERN_SUCCESS) {
+    if(kr != KERN_SUCCESS) {
         printf("Failed to find PPC I2C interface!\n");
         return -1;
     }
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != 0) {
-        printf("Found PPCI2CInterface user client!\n")
+        printf("Found PPCI2CInterface user client!\n");
         IOObjectRelease(service);
     }
 
