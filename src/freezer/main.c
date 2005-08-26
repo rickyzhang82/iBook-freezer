@@ -2,15 +2,62 @@
 #include <IOKit/IOKitLib.h>
 #include "I2CUserClient.h"
 
-#define kDriverClassName "IOHWSensor"
+#define kIONameMatchPPCI2C "IOHWSensor" //AppleI2C kext IO name match
+//#define kIONameMatchPPCI2C "i2c" //AppleI2C kext IO name match
+
+#define kIOPPluginCurrentValueKey "current-value" // current measured value
+#define kIOPPluginLocationKey     "location"      // readable description
+#define kIOPPluginTypeKey         "type"          // sensor/control type
+#define kIOPPluginTypeTempSensor  "temperature"   // desired type value
+
+// macro to convert sensor temperature format (16.16) to integer (Celsius)
+#define SENSOR_TEMP_FMT_C(x) (double)((x) >> 16)
+
+// macro to convert sensor temperature format (16.16) to integer (Fahrenheit)
+#define SENSOR_TEMP_FMT_F(x) \
+    (double)((((double)((x) >> 16) * (double)9) / (double)5) + (double)32)
+
+void printServiceInfo(const void* serviceDict, CFStringEncoding encoding) {
+    SInt32      currentValue;
+    CFNumberRef sensorValue;
+    CFStringRef sensorType, sensorLocation;
+
+    if (!CFDictionaryGetValueIfPresent((CFDictionaryRef)serviceDict,
+                                       CFSTR(kIOPPluginTypeKey),
+                                       (void *)&sensorType))
+        return;
+
+    sensorLocation = CFDictionaryGetValue((CFDictionaryRef)sensorDict,
+                                          CFSTR(kIOPPluginLocationKey));
+
+    sensorValue = CFDictionaryGetValue((CFDictionaryRef)sensorDict,
+                                       CFSTR(kIOPPluginCurrentValueKey));
+    (void)CFNumberGetValue(sensorValue, kCFNumberSInt32Type,
+                           (void *)&currentValue);
+
+    if (CFStringCompare(sensorType, CFSTR(kIOPPluginTypeTempSensor), 0) ==
+            kCFCompareEqualTo) {
+        printf("%24s %7.1f C %9.1f F\n",
+               // see documentation for CFStringGetCStringPtr() caveat
+               CFStringGetCStringPtr(sensorLocation, encoding),
+               SENSOR_TEMP_FMT_C(currentValue),
+               SENSOR_TEMP_FMT_F(currentValue));
+    } else {
+        printf("%24s %7.1f \n",
+               CFStringGetCStringPtr(sensorLocation, encoding), currentValue);
+    }
+}
 
 int main (int argc, const char * argv[]) {
     io_iterator_t       iter;
     io_service_t        service = 0;
     kern_return_t       kr;
+    CFMutableDictionaryRef serviceDict;
+    CFStringEncoding       systemEncoding = CFStringGetSystemEncoding();
 
 	// Create an iterator for all IO Registry objects that match the dictionary
-    kr =  IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(kDriverClassName), &iter);
+    kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
+                                       IOServiceMatching(kIONameMatchPPCI2C), &iter);
     if(kr != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kr);
         return -1;
@@ -18,7 +65,12 @@ int main (int argc, const char * argv[]) {
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
-        printf("Found a devicec class "kDriverClassName"\n\n");
+        printf("Found a devicec class "kIONameMatchPPCI2C"\n\n");
+        kr = IORegistryEntryCreateCFProperties(service, &serviceDict,
+                 kCFAllocatorDefault, kNilOptions);
+        if (kr == KERN_SUCCESS)
+            printServiceInfo(serviceDict, systemEncoding);
+        CFRelease(serviceDict);
         IOObjectRelease(service);
     }
 	
