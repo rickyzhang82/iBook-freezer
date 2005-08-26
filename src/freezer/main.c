@@ -4,8 +4,8 @@
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONameMatchPPCI2C "i2c" //PPCI2C name match
-#define kIOClassKey "IOClass"
 #define kIOClassValuePPCI2CInterface "PPCI2CInterface"
+#define kIOProviderClassValueIOPlatformDevice "IOPlatformDevice"
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -73,7 +73,7 @@ void printSensorsInfo(const void* serviceDict, CFStringEncoding encoding) {
 /**
  * @brief pollIOHWSensor Poll I/O hardware sensor reading
  */
-void pollIOHWSensor() {
+int pollIOHWSensor() {
     io_iterator_t           iter;
     io_service_t            service = 0;
     kern_return_t           kr;
@@ -99,17 +99,16 @@ void pollIOHWSensor() {
     }
     
     IOObjectRelease(iter);
+    return 0;
 }
 
 /**
  * @brief pollADT746XChipViaI2C
  */
-void pollADT746XChipViaI2C() {
+int pollADT746XChipViaI2C() {
     io_iterator_t           iter;
     io_service_t            service = 0;
     kern_return_t           kr;
-    CFMutableDictionaryRef  serviceDict;
-    CFStringEncoding        systemEncoding = CFStringGetSystemEncoding();
     CFMutableDictionaryRef  matchingDictionary;
 
     // Create PPC I2C interface matching dictionary
@@ -117,6 +116,9 @@ void pollADT746XChipViaI2C() {
     // Add a key value pair: (IOClass, PPCI2CInterface) to further filter
     CFDictionaryAddValue(matchingDictionary, CFSTR(kIOClassKey),
                          CFSTR(kIOClassValuePPCI2CInterface));
+    // Add a key value pair: (IOProviderClass, IOPlatformDevice) to further filter
+    CFDictionaryAddValue(matchingDictionary, CFSTR(kIOProviderClassKey),
+                         CFSTR(kIOProviderClassValueIOPlatformDevice));
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
@@ -128,7 +130,7 @@ void pollADT746XChipViaI2C() {
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
-        printf("Found I2C controller with class name "kIOClassValuePPCI2CInterface" matched!\n\n");
+        printf("Found I2C controller with class name "kIOClassValuePPCI2CInterface" matched!\n");
         IOObjectRelease(service);
     }
 
@@ -140,7 +142,7 @@ void pollADT746XChipViaI2C() {
 int main (int argc, const char * argv[]) {
     printf("Poll from IOHWSensor:\n");
     pollIOHWSensor();
-    printf("Poll from I2C bus:\n");
+    printf("\nPoll from I2C bus:\n");
     pollADT746XChipViaI2C();
     return 0;
 }
