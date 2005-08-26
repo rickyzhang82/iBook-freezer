@@ -2,29 +2,27 @@
 #include <IOKit/IOKitLib.h>
 #include "I2CUserClient.h"
 
-#define IOCLASS_I2C "PPCI2CInterface"
+#define kDriverClassName "IOHWSensor"
 
 int main (int argc, const char * argv[]) {
-    CFDictionaryRef     matchingDict = NULL;
-    io_iterator_t       iter = 0;
+    io_iterator_t       iter;
     io_service_t        service = 0;
     kern_return_t       kr;
 
-    // Create a matching dictionary that will find PPC I2C interface user client
-    matchingDict = IOServiceMatching(IOCLASS_I2C);
-
-    // Create an iterator for all IO Registry objects that match the dictionary
-    kr =  IOServiceGetMatchingServices(kIOMasterPortDefault, matchingDict, &iter);
+	// Create an iterator for all IO Registry objects that match the dictionary
+    kr =  IOServiceGetMatchingServices(kIOMasterPortDefault, IOServiceMatching(kDriverClassName), &iter);
     if(kr != KERN_SUCCESS) {
-        printf("Failed to find PPC I2C interface!\n");
+        fprintf(stderr, "IOServiceGetMatchingServices returned 0x%08x\n\n", kr);
         return -1;
     }
 
     // Iterate over all matching objects
-    while((service = IOIteratorNext(iter)) != 0) {
-        printf("Found PPCI2CInterface user client!\n");
+    while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
+        printf("Found a devicec class "kDriverClassName"\n\n");
         IOObjectRelease(service);
     }
+	
+	IOObjectRelease(iter);
 
     return 0;
 }
