@@ -1,0 +1,4 @@
+g4fancontrol:
+	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation (compatibility version 300.0.0, current version 567.29.0)
+	/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit (compatibility version 1.0.0, current version 275.0.0)
+	/usr/lib/libSystem.B.dylib (compatibility version 1.0.0, current version 88.4.1)
