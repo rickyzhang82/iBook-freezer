@@ -1,0 +1,109 @@
+__dyld_make_delayed_module_initializer_calls
+__dyld_image_count
+__dyld_get_image_name
+__dyld_get_image_header
+__dyld_NSLookupSymbolInImage
+__dyld_NSAddressOfSymbol
+libobjc
+__objcInit
+__dyld_mod_term_funcs
+stats
+ilstats
+set-sensor-0
+set-sensor-1
+set-sensor-2
+  G4-FanControl v0.4
+  Fabrizi Andrea - andrea.fabrizi@gmail.com
+  http://www.andreafabrizi.it
+  Error: Illegal argument for option "set-sensor-0"
+  Error: Illegal argument for option "set-sensor-1"
+  Error: Illegal argument for option "set-sensor-2"
+  Error: Illegal argument for option "set"
+  Error: Command line arguments conflict
+   Your MAC is not supported at this time or probably you don't run
+   this application using sudo or root privilegies!
+IOI2CDevice
+path
+compatible
+IOService
+IOClass
+address
+IODeviceTree
+AAPL,i2c-bus
+IOI2CController
+AAPL,bus-id
+PPCI2CInterface
+IOResources
+PPCI2CInterface.i2c-mac-io
+IODeviceTree:ki2c
+IODeviceTree:mac-io/i2c
+PPCI2CInterface.i2c-uni-n
+IODeviceTree:ui2c
+IODeviceTree:u3/i2c
+PPCI2CInterface.pmu-i2c
+IODeviceTree:pi2c
+pmu-i2c
+PPCI2CInterface.smu-i2c
+IODeviceTree:smu/i2c
+smu-i2c
+ # %s: %d
+ # %s
+IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x/IOI2CADT746x
+ADT746x
+ - Probing for IOI2CControllerPPC interface... 
+found @ 0x%x
+ - Bus I2C @ 0x%x
+ - Controller (%s) @ 0x%x
+ - Locking Device... 
+Error
+not found
+Local Sensor temperature
+Unable to access to local Sensor temperature register
+Remote Sensor (1) temperature
+Unable to access to remote Sensor (1) temperature register
+Remote Sensor (2) temperature
+Unable to access to remote Sensor (2) temperature register
+Local Sensor temperature limit
+Unable to access to local Sensor temperature limit register
+Remote Sensor (1) temperature limit
+Unable to access to remote Sensor (1) temperature limit register
+Remote Sensor (2) temperature limit
+Unable to access to remote Sensor (2) temperature limit register
+ > Setting local Sensor temperature limit to %d
+... 
+ > Setting remote Sensor (1) temperature limit to %d
+... 
+ > Setting remote Sensor (2) temperature limit to %d
+... 
+ILSTATS
+ - Unlocking and Closing Device... 
+ # %s: %d
+IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/PPCI2CInterface
+ - Probing for PPCI2CInterface interface... 
+ > Setting local Sensor temperature limit to %d
+... 
+ILSTATS 
+ %d 
+ - Closing Interface... 
+  Usage:
+   ./g4fancontrol [options]
+   --stats
+Shows information about the current temperatures and limits
+   --ilstats
+Lists the "in-line" stats (use ./g4fancontrol --ilstats | grep ILSTATS)
+   --set <temp>
+Sets the temperature sensor limits to <temp>
+   --set-sensor-0 <temp>
+Sets the temperature limit for the local sensor to <temp>
+   --set-sensor-1 <temp>
+Sets the temperature limit for the remote sensor(1) to <temp>
+   --set-sensor-2 <temp>
+Sets the temperature limit for the remote sensor(2) to <temp>
+   <temp>: Value must be between 20 and 100
+%s (error code 0x%x)
+printf
+sprintf
+$LDBL128
+libSystem.
+&%'hgi
+&%'hgi
