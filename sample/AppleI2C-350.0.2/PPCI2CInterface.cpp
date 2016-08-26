@@ -63,7 +63,7 @@ OSDefineMetaClassAndStructors( PPCI2CInterface, IOService )
 static UInt32 gLoopsPerMic;
 
 static UInt64 SpinLoop (UInt32 spinCount) {
-	AbsoluteTime start, end;
+	uint64_t start, end;
 	SInt64 startnano, delta;
 	volatile UInt32 volCount = spinCount;			// Make compiler run the loop
 	

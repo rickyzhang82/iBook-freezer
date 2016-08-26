@@ -1,0 +1,559 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6CAA18FEFFF1ABBA11CA2CAD /* PPCI2CInterface.h in Headers */ = {isa = PBXBuildFile; fileRef = 6CAA18FDFFF1ABBA11CA2CAD /* PPCI2CInterface.h */; };
+		6CAA18FFFFF1ABBA11CA2CAD /* PPCI2CInterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6CAA18FCFFF1ABBA11CA2CAD /* PPCI2CInterface.cpp */; settings = {ATTRIBUTES = (); }; };
+		70A66923FFF1B3F911CA2CAD /* PPCI2CInterface.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6CAA18FDFFF1ABBA11CA2CAD /* PPCI2CInterface.h */; };
+		DDE7AE16035F6FDB0DCE1A6A /* I2CUserClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDE7AE15035F6FDB0DCE1A6A /* I2CUserClient.cpp */; };
+		DDE7AE18035F6FF50DCE1A6A /* I2CUserClient.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE7AE17035F6FF50DCE1A6A /* I2CUserClient.h */; };
+		DDE7AE1A035F70060DCE1A6A /* I2CUserClientPrivate.h in Headers */ = {isa = PBXBuildFile; fileRef = DDE7AE19035F70060DCE1A6A /* I2CUserClientPrivate.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBundleTarget section */
+		089C1673FE841209C02AAC07 /* AppleI2C */ = {
+			isa = PBXBundleTarget;
+			buildConfigurationList = 9C97CF301D705B2C001BAF74 /* Build configuration list for PBXBundleTarget "AppleI2C" */;
+			buildPhases = (
+				06AA1267FFB2110C11CA28AA /* ShellScript */,
+				089C1674FE841209C02AAC07 /* Headers */,
+				089C1675FE841209C02AAC07 /* Resources */,
+				089C1676FE841209C02AAC07 /* Sources */,
+				089C1677FE841209C02AAC07 /* Frameworks */,
+				089C1679FE841209C02AAC07 /* Rez */,
+				06AA1264FFB2107B11CA28AA /* ShellScript */,
+			);
+			dependencies = (
+				70A66924FFF1B40711CA2CAD /* PBXTargetDependency */,
+			);
+			name = AppleI2C;
+			productInstallPath = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+			productName = AppleI2C;
+			productReference = 0B81C263FFB7832611CA28AA /* AppleI2C.kext */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>AppleI2C</string>
+	<key>CFBundleGetInfoString</key>
+	<string>AppleI2C version 3.5.0, Copyright 2003-2005 Apple Computer, Inc.</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string>com.apple.driver.AppleI2C</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>AppleI2C</string>
+	<key>CFBundlePackageType</key>
+	<string>KEXT</string>
+	<key>CFBundleShortVersionString</key>
+	<string>3.5.0</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>3.5.0d2</string>
+	<key>IOKitPersonalities</key>
+	<dict>
+		<key>MacIOAppleI2C</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleI2C</string>
+			<key>IOClass</key>
+			<string>PPCI2CInterface</string>
+			<key>IONameMatch</key>
+			<string>i2c</string>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+			<key>IOUserClientClass</key>
+			<string>I2CUserClient</string>
+		</dict>
+		<key>PmuAppleI2C</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleI2C</string>
+			<key>IOClass</key>
+			<string>PPCI2CInterface</string>
+			<key>IONameMatch</key>
+			<string>pmu-i2c</string>
+			<key>IOProbeScore</key>
+			<integer>10000</integer>
+			<key>IOProviderClass</key>
+			<string>AppleMacIODevice</string>
+			<key>IOUserClientClass</key>
+			<string>I2CUserClient</string>
+		</dict>
+		<key>SmuAppleI2C</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleI2C</string>
+			<key>IOClass</key>
+			<string>PPCI2CInterface</string>
+			<key>IONameMatch</key>
+			<string>i2c</string>
+			<key>IOProviderClass</key>
+			<string>AppleSMUDevice</string>
+			<key>IOUserClientClass</key>
+			<string>I2CUserClient</string>
+		</dict>
+		<key>UniNAppleI2C</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.driver.AppleI2C</string>
+			<key>IOClass</key>
+			<string>PPCI2CInterface</string>
+			<key>IONameMatch</key>
+			<string>i2c</string>
+			<key>IOProviderClass</key>
+			<string>IOPlatformDevice</string>
+			<key>IOUserClientClass</key>
+			<string>I2CUserClient</string>
+		</dict>
+	</dict>
+	<key>OSBundleLibraries</key>
+	<dict>
+		<key>com.apple.kernel.iokit</key>
+		<string>1.0.0b1</string>
+		<key>com.apple.kernel.libkern</key>
+		<string>1.0.0b1</string>
+		<key>com.apple.kernel.mach</key>
+		<string>1.0.0b1</string>
+	</dict>
+	<key>OSBundleRequired</key>
+	<string>Root</string>
+</dict>
+</plist>
+";
+		};
+/* End PBXBundleTarget section */
+
+/* Begin PBXContainerItemProxy section */
+		9C97CF241D705AEA001BAF74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 089C1669FE841209C02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70A6691CFFF1B3B311CA2CAD /* cpyhdr */;
+			remoteInfo = cpyhdr;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		70A6691EFFF1B3B311CA2CAD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Kernel.framework/Versions/A/Headers/IOKit/i2c";
+			dstSubfolderSpec = 0;
+			files = (
+				70A66923FFF1B3F911CA2CAD /* PPCI2CInterface.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0B81C263FFB7832611CA28AA /* AppleI2C.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = AppleI2C.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CAA18FCFFF1ABBA11CA2CAD /* PPCI2CInterface.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = PPCI2CInterface.cpp; sourceTree = "<group>"; };
+		6CAA18FDFFF1ABBA11CA2CAD /* PPCI2CInterface.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PPCI2CInterface.h; sourceTree = "<group>"; };
+		70A6691BFFF1B3B311CA2CAD /* cpyhdr */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; path = cpyhdr; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDE7AE15035F6FDB0DCE1A6A /* I2CUserClient.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = I2CUserClient.cpp; sourceTree = "<group>"; };
+		DDE7AE17035F6FF50DCE1A6A /* I2CUserClient.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = I2CUserClient.h; sourceTree = "<group>"; };
+		DDE7AE19035F70060DCE1A6A /* I2CUserClientPrivate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = I2CUserClientPrivate.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		089C1677FE841209C02AAC07 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70A66920FFF1B3B311CA2CAD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		089C166AFE841209C02AAC07 /* AppleI2C */ = {
+			isa = PBXGroup;
+			children = (
+				247142CAFF3F8F9811CA285C /* Source */,
+				089C167CFE841241C02AAC07 /* Resources */,
+				19C28FB6FE9D52B211CA2CBB /* Products */,
+			);
+			name = AppleI2C;
+			sourceTree = "<group>";
+		};
+		089C167CFE841241C02AAC07 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		19C28FB6FE9D52B211CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0B81C263FFB7832611CA28AA /* AppleI2C.kext */,
+				70A6691BFFF1B3B311CA2CAD /* cpyhdr */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		247142CAFF3F8F9811CA285C /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				6CAA18FCFFF1ABBA11CA2CAD /* PPCI2CInterface.cpp */,
+				6CAA18FDFFF1ABBA11CA2CAD /* PPCI2CInterface.h */,
+				DDE7AE15035F6FDB0DCE1A6A /* I2CUserClient.cpp */,
+				DDE7AE17035F6FF50DCE1A6A /* I2CUserClient.h */,
+				DDE7AE19035F70060DCE1A6A /* I2CUserClientPrivate.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		089C1674FE841209C02AAC07 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CAA18FEFFF1ABBA11CA2CAD /* PPCI2CInterface.h in Headers */,
+				DDE7AE18035F6FF50DCE1A6A /* I2CUserClient.h in Headers */,
+				DDE7AE1A035F70060DCE1A6A /* I2CUserClientPrivate.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70A6691DFFF1B3B311CA2CAD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXProject section */
+		089C1669FE841209C02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 9C97CF341D705B2C001BAF74 /* Build configuration list for PBXProject "AppleI2C" */;
+			hasScannedForEncodings = 1;
+			mainGroup = 089C166AFE841209C02AAC07 /* AppleI2C */;
+			projectDirPath = "";
+			targets = (
+				089C1673FE841209C02AAC07 /* AppleI2C */,
+				70A6691CFFF1B3B311CA2CAD /* cpyhdr */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		089C1675FE841209C02AAC07 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXRezBuildPhase section */
+		089C1679FE841209C02AAC07 /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70A66921FFF1B3B311CA2CAD /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		06AA1264FFB2107B11CA28AA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPostprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+		06AA1267FFB2110C11CA28AA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "script=\"${SYSTEM_DEVELOPER_DIR}/ProjectBuilder Extras/Kernel Extension Support/KEXTPreprocess\";\nif [ -x \"$script\" ]; then\n    . \"$script\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		089C1676FE841209C02AAC07 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6CAA18FFFFF1ABBA11CA2CAD /* PPCI2CInterface.cpp in Sources */,
+				DDE7AE16035F6FDB0DCE1A6A /* I2CUserClient.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70A6691FFFF1B3B311CA2CAD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		70A66924FFF1B40711CA2CAD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70A6691CFFF1B3B311CA2CAD /* cpyhdr */;
+			targetProxy = 9C97CF241D705AEA001BAF74 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXToolTarget section */
+		70A6691CFFF1B3B311CA2CAD /* cpyhdr */ = {
+			isa = PBXToolTarget;
+			buildConfigurationList = 9C97CF2C1D705B2C001BAF74 /* Build configuration list for PBXToolTarget "cpyhdr" */;
+			buildPhases = (
+				70A6691DFFF1B3B311CA2CAD /* Headers */,
+				70A6691EFFF1B3B311CA2CAD /* CopyFiles */,
+				70A6691FFFF1B3B311CA2CAD /* Sources */,
+				70A66920FFF1B3B311CA2CAD /* Frameworks */,
+				70A66921FFF1B3B311CA2CAD /* Rez */,
+			);
+			dependencies = (
+			);
+			name = cpyhdr;
+			productInstallPath = /usr/local/bin;
+			productName = cpyhdr;
+			productReference = 70A6691BFFF1B3B311CA2CAD /* cpyhdr */;
+		};
+/* End PBXToolTarget section */
+
+/* Begin XCBuildConfiguration section */
+		9C97CF2D1D705B2C001BAF74 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = cpyhdr;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		9C97CF2E1D705B2C001BAF74 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = cpyhdr;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		9C97CF2F1D705B2C001BAF74 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = cpyhdr;
+				REZ_EXECUTABLE = YES;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		9C97CF311D705B2C001BAF74 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.apple.driver.AppleI2C;
+				MODULE_VERSION = 3.5.0d2;
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AppleI2C;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = kext;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		9C97CF321D705B2C001BAF74 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.apple.driver.AppleI2C;
+				MODULE_VERSION = 3.5.0d2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AppleI2C;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = kext;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		9C97CF331D705B2C001BAF74 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				INSTALL_PATH = "$(SYSTEM_LIBRARY_DIR)/Extensions";
+				KERNEL_MODULE = YES;
+				LIBRARY_SEARCH_PATHS = "";
+				MODULE_IOKIT = YES;
+				MODULE_NAME = com.apple.driver.AppleI2C;
+				MODULE_VERSION = 3.5.0d2;
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = AppleI2C;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = kext;
+			};
+			name = Default;
+		};
+		9C97CF351D705B2C001BAF74 /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		9C97CF361D705B2C001BAF74 /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		9C97CF371D705B2C001BAF74 /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9C97CF2C1D705B2C001BAF74 /* Build configuration list for PBXToolTarget "cpyhdr" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9C97CF2D1D705B2C001BAF74 /* Development */,
+				9C97CF2E1D705B2C001BAF74 /* Deployment */,
+				9C97CF2F1D705B2C001BAF74 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		9C97CF301D705B2C001BAF74 /* Build configuration list for PBXBundleTarget "AppleI2C" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9C97CF311D705B2C001BAF74 /* Development */,
+				9C97CF321D705B2C001BAF74 /* Deployment */,
+				9C97CF331D705B2C001BAF74 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		9C97CF341D705B2C001BAF74 /* Build configuration list for PBXProject "AppleI2C" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9C97CF351D705B2C001BAF74 /* Development */,
+				9C97CF361D705B2C001BAF74 /* Deployment */,
+				9C97CF371D705B2C001BAF74 /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 089C1669FE841209C02AAC07 /* Project object */;
+}
