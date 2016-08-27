@@ -136,6 +136,9 @@ int pollADT746XChipViaI2C() {
             printf("Found I2C controller with class name %s matched!\n", className);
         else
             printf("Found I2C controller with unknown class name!\n");
+        if(0 == strcmp(className, kIOProviderClassValueIOPlatformDevice))
+            printf("Found a match to create a connection!\n");
+
         IOObjectRelease(service);
     }
 
