@@ -130,7 +130,12 @@ int pollADT746XChipViaI2C() {
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
-        printf("Found I2C controller with class name "kIOClassValuePPCI2CInterface" matched!\n");
+        io_name_t className;
+        kr = IOObjectGetClass(service, className);
+        if(kr == KERN_SUCCESS)
+            printf("Found I2C controller with class name %s matched!\n", className);
+        else
+            printf("Found I2C controller with unknown class name!\n");
         IOObjectRelease(service);
     }
 
