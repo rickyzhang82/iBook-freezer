@@ -62,7 +62,7 @@ void printSensorsInfo(const void* serviceDict, CFStringEncoding encoding) {
                CFStringGetCStringPtr(sensorLocation, encoding), 
                CFStringGetCStringPtr(sensorType, encoding),
                SENSOR_VOLT_FMT(currentValue));
-    }else {
+    } else {
         printf("%24s %15s %7ld\n",
                CFStringGetCStringPtr(sensorLocation, encoding), 
                CFStringGetCStringPtr(sensorType, encoding),
@@ -136,6 +136,7 @@ int pollADT746XChipViaI2C() {
             printf("Found I2C controller with class name %s matched!\n", className);
         else
             printf("Found I2C controller with unknown class name!\n");
+
         if(0 == strcmp(className, kIOProviderClassValueIOPlatformDevice))
             printf("Found a match to create a connection!\n");
 
