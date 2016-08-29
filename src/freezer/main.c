@@ -148,6 +148,21 @@ int pollADT746XChipViaI2C() {
     return 0;
 }
 
+/**
+ * @brief pollIOI2C use IOI2C helper function
+ * @return
+ */
+int pollIOI2C() {
+    CFArrayRef i2cArrayRef = findI2CInterface();
+    for(int i = 0; i < CFArrayGetCount(i2cArrayRef); i++) {
+        CFStringRef sName = (CFStringRef)CFArrayGetValueAtIndex( names, i );
+        printf("found I2C interface: %s\n",
+               CFStringGetCStringPtr( sName , kCFStringEncodingMacRoman ));
+        CFRelease(sName);
+    }
+    CFRelease(i2cArrayRef);
+}
+
 int main (int argc, const char * argv[]) {
     printf("Poll from IOHWSensor:\n");
     pollIOHWSensor();
