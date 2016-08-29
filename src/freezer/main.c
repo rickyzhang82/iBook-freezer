@@ -133,9 +133,12 @@ int pollADT746XChipViaI2C() {
         io_name_t className;
         kr = IOObjectGetClass(service, className);
         if(kr == KERN_SUCCESS)
-            printf("Found I2C controller with class name %s matched!\n", className);
-        else
-            printf("Found I2C controller with unknown class name!\n");
+            printf("Found I2C controller with class name %s !\n", className);
+
+        io_string_t path;
+        kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, path);
+        if(kr == KERN_SUCCESS)
+            printf("Found I2C controller with path %s !\n", path);
 
         IOObjectRelease(service);
     }
