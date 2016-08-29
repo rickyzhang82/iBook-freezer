@@ -12,6 +12,9 @@
 		8DD76F7C0486A8DE00D96B5E /* freezer.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6859E970290921104C91782 /* freezer.1 */; };
 		9CB3D4751D708C050045D8B5 /* I2CUserClient.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9CB3D4741D708C050045D8B5 /* I2CUserClient.h */; };
 		9CB3D47F1D708C520045D8B5 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CB3D47E1D708C520045D8B5 /* IOKit.framework */; };
+		9CCD8B041D743CE6001328D7 /* IOI2C.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CCD8B021D743CE6001328D7 /* IOI2C.c */; };
+		9CCD8B051D743CE6001328D7 /* IOI2C.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9CCD8B031D743CE6001328D7 /* IOI2C.h */; };
+		9CCD8B731D7442C1001328D7 /* IOI2CDefs.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9CCD8B721D7442C1001328D7 /* IOI2CDefs.h */; };
 		9CF60E921D73C7870066AAAB /* ADT746x.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9CF60E911D73C7870066AAAB /* ADT746x.h */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +28,8 @@
 				8DD76F7C0486A8DE00D96B5E /* freezer.1 in CopyFiles */,
 				9CB3D4751D708C050045D8B5 /* I2CUserClient.h in CopyFiles */,
 				9CF60E921D73C7870066AAAB /* ADT746x.h in CopyFiles */,
+				9CCD8B051D743CE6001328D7 /* IOI2C.h in CopyFiles */,
+				9CCD8B731D7442C1001328D7 /* IOI2CDefs.h in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -36,6 +41,9 @@
 		8DD76F7E0486A8DE00D96B5E /* freezer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = freezer; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CB3D4741D708C050045D8B5 /* I2CUserClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = I2CUserClient.h; sourceTree = "<group>"; };
 		9CB3D47E1D708C520045D8B5 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		9CCD8B021D743CE6001328D7 /* IOI2C.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IOI2C.c; sourceTree = "<group>"; };
+		9CCD8B031D743CE6001328D7 /* IOI2C.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOI2C.h; sourceTree = "<group>"; };
+		9CCD8B721D7442C1001328D7 /* IOI2CDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IOI2CDefs.h; sourceTree = "<group>"; };
 		9CF60E911D73C7870066AAAB /* ADT746x.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADT746x.h; sourceTree = "<group>"; };
 		C6859E970290921104C91782 /* freezer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = freezer.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -67,6 +75,9 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				9CCD8B721D7442C1001328D7 /* IOI2CDefs.h */,
+				9CCD8B021D743CE6001328D7 /* IOI2C.c */,
+				9CCD8B031D743CE6001328D7 /* IOI2C.h */,
 				9CF60E911D73C7870066AAAB /* ADT746x.h */,
 				9CB3D4741D708C050045D8B5 /* I2CUserClient.h */,
 				08FB7796FE84155DC02AAC07 /* main.c */,
@@ -141,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD76F770486A8DE00D96B5E /* main.c in Sources */,
+				9CCD8B041D743CE6001328D7 /* IOI2C.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

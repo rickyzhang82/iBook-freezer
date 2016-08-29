@@ -48,7 +48,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
-#include <IOI2C/IOI2CDefs.h>
+#include "IOI2CDefs.h"
 
 #ifndef IOI2C_H_
 #define IOI2C_H_
