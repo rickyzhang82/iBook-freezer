@@ -3,9 +3,9 @@
 #include "IOI2C.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
-#define kIONameMatchPPCI2C "i2c" //PPCI2C name match
+#define kIONameMatchI2C "i2c" //PPCI2C name match
 #define kIOClassValuePPCI2CInterface "PPCI2CInterface"
-#define kIOProviderClassValueIOPlatformDevice "IOPlatformDevice"
+#define kIOUserClientClassValueI2CUserClient "I2CUserClient"
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -112,13 +112,13 @@ int pollADT746XChipViaI2C() {
     CFMutableDictionaryRef  matchingDictionary;
 
     // Create PPC I2C interface matching dictionary
-    matchingDictionary = IOServiceNameMatching(kIONameMatchPPCI2C);
+    matchingDictionary = IOServiceNameMatching(kIONameMatchI2C);
     // Add a key value pair: (IOClass, PPCI2CInterface) to further filter
     CFDictionaryAddValue(matchingDictionary, CFSTR(kIOClassKey),
                          CFSTR(kIOClassValuePPCI2CInterface));
     // Add a key value pair: (IOProviderClass, IOPlatformDevice) to further filter
-    CFDictionaryAddValue(matchingDictionary, CFSTR(kIOProviderClassKey),
-                         CFSTR(kIOProviderClassValueIOPlatformDevice));
+    CFDictionaryAddValue(matchingDictionary, CFSTR(kIOUserClientClassKey),
+                         CFSTR(kIOUserClientClassValueI2CUserClient));
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
@@ -136,9 +136,6 @@ int pollADT746XChipViaI2C() {
             printf("Found I2C controller with class name %s matched!\n", className);
         else
             printf("Found I2C controller with unknown class name!\n");
-
-        if(0 == strcmp(className, kIOProviderClassValueIOPlatformDevice))
-            printf("Found a match to create a connection!\n");
 
         IOObjectRelease(service);
     }
