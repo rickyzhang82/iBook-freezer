@@ -1,6 +1,6 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
-#include "I2CUserClient.h"
+#include "IOI2C.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONameMatchPPCI2C "i2c" //PPCI2C name match
@@ -153,14 +153,14 @@ int pollADT746XChipViaI2C() {
  * @return
  */
 int pollIOI2C() {
-    CFArrayRef i2cArrayRef = findI2CInterface();
-    for(int i = 0; i < CFArrayGetCount(i2cArrayRef); i++) {
-        CFStringRef sName = (CFStringRef)CFArrayGetValueAtIndex( names, i );
+    CFArrayRef i2cArrayRef = (CFArrayRef) findI2CInterfaces();
+    int i;
+    for(i = 0; i < CFArrayGetCount(i2cArrayRef); i++) {
+        CFStringRef sName = (CFStringRef)CFArrayGetValueAtIndex( i2cArrayRef, i );
         printf("found I2C interface: %s\n",
                CFStringGetCStringPtr( sName , kCFStringEncodingMacRoman ));
-        CFRelease(sName);
     }
-    CFRelease(i2cArrayRef);
+    return 0;
 }
 
 int main (int argc, const char * argv[]) {
@@ -168,5 +168,7 @@ int main (int argc, const char * argv[]) {
     pollIOHWSensor();
     printf("\nPoll from I2C bus:\n");
     pollADT746XChipViaI2C();
+    printf("\nPoll from IOI2C helper:\n");
+    pollIOI2C();
     return 0;
 }
