@@ -116,9 +116,6 @@ int pollADT746XChipViaI2C() {
     // Add a key value pair: (IOClass, PPCI2CInterface) to further filter
     CFDictionaryAddValue(matchingDictionary, CFSTR(kIOClassKey),
                          CFSTR(kIOClassValuePPCI2CInterface));
-    // Add a key value pair: (IOProviderClass, IOPlatformDevice) to further filter
-    CFDictionaryAddValue(matchingDictionary, CFSTR(kIOUserClientClassKey),
-                         CFSTR(kIOUserClientClassValueI2CUserClient));
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
@@ -133,16 +130,16 @@ int pollADT746XChipViaI2C() {
         io_name_t className;
         kr = IOObjectGetClass(service, className);
         if(kr == KERN_SUCCESS)
-            printf("Found I2C controller with class name %s !\n", className);
+            printf("Found I2C controller with class name %s\n", className);
 
         io_string_t device_path, service_path;
         kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
         if(kr == KERN_SUCCESS)
-            printf("\tFound I2C controller with path %s !\n", device_path);
+            printf("\tFound I2C controller with path %s\n", device_path);
 
         kr = IORegistryEntryGetPath(service, kIOServicePlane, service_path);
         if(kr == KERN_SUCCESS)
-            printf("\tFound I2C controller with path %s !\n", service_path);
+            printf("\tFound I2C controller with path %s\n", service_path);
 
         IOObjectRelease(service);
     }
