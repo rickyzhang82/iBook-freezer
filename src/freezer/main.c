@@ -5,6 +5,7 @@
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONameMatchI2C "i2c" //PPCI2C name match
 #define kIONameMatchI2C_BUS "i2c-bus" //PPCI2C name match
+#define kIONameMatchIOI2CPPC "uni-n-i2c-control"
 #define kIOClassValuePPCI2CInterface "PPCI2CInterface"
 #define kIOUserClientClassValueI2CUserClient "I2CUserClient"
 
@@ -113,10 +114,7 @@ int pollADT746XChipViaI2C() {
     CFMutableDictionaryRef  matchingDictionary;
 
     // Create PPC I2C interface matching dictionary
-    matchingDictionary = IOServiceNameMatching(kIONameMatchI2C_BUS);
-    // Add a key value pair: (IOClass, PPCI2CInterface) to further filter
-    CFDictionaryAddValue(matchingDictionary, CFSTR(kIOClassKey),
-                         CFSTR(kIOClassValuePPCI2CInterface));
+    matchingDictionary = IOServiceNameMatching(kIONameMatchIOI2CPPC);
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
