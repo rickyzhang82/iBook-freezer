@@ -4,6 +4,7 @@
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONameMatchI2C "i2c" //PPCI2C name match
+#define kIONameMatchI2C_BUS "i2c-bus" //PPCI2C name match
 #define kIOClassValuePPCI2CInterface "PPCI2CInterface"
 #define kIOUserClientClassValueI2CUserClient "I2CUserClient"
 
@@ -112,7 +113,7 @@ int pollADT746XChipViaI2C() {
     CFMutableDictionaryRef  matchingDictionary;
 
     // Create PPC I2C interface matching dictionary
-    matchingDictionary = IOServiceNameMatching(kIONameMatchI2C);
+    matchingDictionary = IOServiceNameMatching(kIONameMatchI2C_BUS);
     // Add a key value pair: (IOClass, PPCI2CInterface) to further filter
     CFDictionaryAddValue(matchingDictionary, CFSTR(kIOClassKey),
                          CFSTR(kIOClassValuePPCI2CInterface));
@@ -149,6 +150,11 @@ int pollADT746XChipViaI2C() {
     return 0;
 }
 
+static void printKeys (const void* key, const void* value, void* context) {
+  CFShowStr(key);
+  CFShowStr(value);
+}
+
 /**
  * @brief pollIOI2C use IOI2C helper function
  * @return
@@ -157,9 +163,8 @@ int pollIOI2C() {
     CFArrayRef i2cArrayRef = (CFArrayRef) findPPCI2CInterfaces();
     int i;
     for(i = 0; i < CFArrayGetCount(i2cArrayRef); i++) {
-        CFStringRef sName = (CFStringRef)CFArrayGetValueAtIndex( i2cArrayRef, i );
-        printf("found PPC I2C interface: %s\n",
-               CFStringGetCStringPtr( sName , kCFStringEncodingMacRoman ));
+        CFDictionaryRef dictRef = (CFDictionaryRef)CFArrayGetValueAtIndex( i2cArrayRef, i );
+        CFDictionaryApplyFunction(dictRef, printKeys, NULL);
     }
     return 0;
 }
