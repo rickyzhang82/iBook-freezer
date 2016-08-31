@@ -172,7 +172,5 @@ int main (int argc, const char * argv[]) {
     pollIOHWSensor();
     printf("\nPoll from I2C bus:\n");
     pollADT746XChipViaI2C();
-    printf("\nPoll from IOI2C helper:\n");
-    pollIOI2C();
     return 0;
 }
