@@ -108,17 +108,17 @@ void testUserClient(io_service_t service) {
     kern_return_t           kr;
     io_connect_t            dataPort;
     kr = IOServiceOpen(service, mach_task_self(), 0, &dataPort);
-    if (kernResult != KERN_SUCCESS) {
-        fprintf(stderr, "IOServiceOpen returned 0x%08x\n", kernResult);
+    if (kr != KERN_SUCCESS) {
+        fprintf(stderr, "IOServiceOpen returned 0x%08x\n", kr);
         return;
     }
 
-    kr = IOServiceClose(connect);
+    kr = IOServiceClose(dataPort);
     if (kr == KERN_SUCCESS) {
         printf("IOServiceClose was successful.\n\n");
     }
     else {
-        fprintf(stderr, "IOServiceClose returned 0x%08x\n\n", kernResult);
+        fprintf(stderr, "IOServiceClose returned 0x%08x\n\n", kr);
     }
 }
 
