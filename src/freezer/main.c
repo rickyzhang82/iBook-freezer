@@ -154,11 +154,11 @@ int pollADT746XChipViaI2C() {
  * @return
  */
 int pollIOI2C() {
-    CFArrayRef i2cArrayRef = (CFArrayRef) findI2CInterfaces();
+    CFArrayRef i2cArrayRef = (CFArrayRef) findPPCI2CInterfaces();
     int i;
     for(i = 0; i < CFArrayGetCount(i2cArrayRef); i++) {
         CFStringRef sName = (CFStringRef)CFArrayGetValueAtIndex( i2cArrayRef, i );
-        printf("found I2C interface: %s\n",
+        printf("found PPC I2C interface: %s\n",
                CFStringGetCStringPtr( sName , kCFStringEncodingMacRoman ));
     }
     return 0;
