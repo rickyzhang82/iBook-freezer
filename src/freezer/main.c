@@ -104,6 +104,24 @@ int pollIOHWSensor() {
     return 0;
 }
 
+void testUserClient(io_service_t service) {
+    kern_return_t           kr;
+    io_connect_t            dataPort;
+    kr = IOServiceOpen(service, mach_task_self(), 0, &dataPort);
+    if (kernResult != KERN_SUCCESS) {
+        fprintf(stderr, "IOServiceOpen returned 0x%08x\n", kernResult);
+        return;
+    }
+
+    kr = IOServiceClose(connect);
+    if (kr == KERN_SUCCESS) {
+        printf("IOServiceClose was successful.\n\n");
+    }
+    else {
+        fprintf(stderr, "IOServiceClose returned 0x%08x\n\n", kernResult);
+    }
+}
+
 /**
  * @brief pollADT746XChipViaI2C
  */
@@ -139,6 +157,8 @@ int pollADT746XChipViaI2C() {
         kr = IORegistryEntryGetPath(service, kIOServicePlane, service_path);
         if(kr == KERN_SUCCESS)
             printf("\tFound I2C controller with path %s\n", service_path);
+
+        testUserClient(service);
 
         IOObjectRelease(service);
     }
