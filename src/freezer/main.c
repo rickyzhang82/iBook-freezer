@@ -150,6 +150,13 @@ int pollADT746XChipViaI2C() {
         if(kr == KERN_SUCCESS)
             printf("Found I2C controller with class name %s\n", className);
 
+        CFTypeRef userClientName = IORegistryEntryCreateCFProperty(service,
+                        CFSTR(kIOUserClientClassKey), kCFAllocatorDefault, 0);
+        if(userClientName) {
+            CFShowStr(userClientName);
+        }
+        CFRelease(userClientName);
+
         io_string_t device_path, service_path;
         kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
         if(kr == KERN_SUCCESS)
