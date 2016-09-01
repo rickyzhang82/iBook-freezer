@@ -4,7 +4,7 @@
 #include "IOI2CDefs.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
-#define kIOI2CDevice "IOI2CDevice"
+#define kIONamMatchADT7467 "adt7467"
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -118,7 +118,6 @@ int pollIOHWSensor() {
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
         kr = IORegistryEntryCreateCFProperties(service, &serviceDict,
                  kCFAllocatorDefault, kNilOptions);
-        printIORegistryEntryInfo(service);
         if (kr == KERN_SUCCESS)
             printSensorsInfo(serviceDict, systemEncoding);
         CFRelease(serviceDict);
@@ -159,7 +158,7 @@ int pollFromI2C() {
     CFMutableDictionaryRef  matchingDictionary;
 
     // Create PPC I2C interface matching dictionary
-    matchingDictionary = IOServiceNameMatching(kIOI2CDevice);
+    matchingDictionary = IOServiceNameMatching(kIONamMatchADT7467);
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
@@ -178,7 +177,9 @@ int pollFromI2C() {
             fprintf(stderr, "IORegistryEntryGetChildEntry returned 0x%08x\n\n", kr);
             return -1;
         }
+        printf("Begin Child Service ---------------------------------\n");
         printIORegistryEntryInfo(childService);
+        printf("End Child Service   ---------------------------------\n");
         testUserClient(childService);
         IOObjectRelease(childService);
         IOObjectRelease(service);
@@ -186,25 +187,6 @@ int pollFromI2C() {
 
     IOObjectRelease(iter);
 
-    return 0;
-}
-
-static void printKeys (const void* key, const void* value, void* context) {
-  CFShowStr(key);
-  CFShowStr(value);
-}
-
-/**
- * @brief pollIOI2C use IOI2C helper function
- * @return
- */
-int pollIOI2C() {
-    CFArrayRef i2cArrayRef = (CFArrayRef) findPPCI2CInterfaces();
-    int i;
-    for(i = 0; i < CFArrayGetCount(i2cArrayRef); i++) {
-        CFDictionaryRef dictRef = (CFDictionaryRef)CFArrayGetValueAtIndex( i2cArrayRef, i );
-        CFDictionaryApplyFunction(dictRef, printKeys, NULL);
-    }
     return 0;
 }
 
