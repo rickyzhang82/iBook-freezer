@@ -73,6 +73,32 @@ void printSensorsInfo(const void* serviceDict, CFStringEncoding encoding) {
     }
 }
 
+void printIORegistryEntryInfo(io_service_t service) {
+    printf("\n\nBegin printIORegistryEntryInfo--------------------\n\n");
+    io_name_t className;
+    kr = IOObjectGetClass(service, className);
+    if(kr == KERN_SUCCESS)
+        printf("Found I2C controller with class name %s\n", className);
+
+    CFMutableDictionaryRef dictRef;
+    kr = IORegistryEntryCreateCFProperties(service, &dictRef, kCFAllocatorDefault, kNilOptions);
+    if(kr == KERN_SUCCESS) {
+            CFShow(dictRef);
+            CFRelease(dictRef);
+    }
+
+    io_string_t device_path, service_path;
+    kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
+    if(kr == KERN_SUCCESS)
+        printf("\tFound I2C controller with path %s\n", device_path);
+
+    kr = IORegistryEntryGetPath(service, kIOServicePlane, service_path);
+    if(kr == KERN_SUCCESS)
+        printf("\tFound I2C controller with path %s\n", service_path);
+
+    printf("\n\nEnd printIORegistryEntryInfo--------------------\n\n");
+}
+
 /**
  * @brief pollIOHWSensor Poll I/O hardware sensor reading
  */
@@ -95,6 +121,7 @@ int pollIOHWSensor() {
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
         kr = IORegistryEntryCreateCFProperties(service, &serviceDict,
                  kCFAllocatorDefault, kNilOptions);
+        printIORegistryEntryInfo(service);
         if (kr == KERN_SUCCESS)
             printSensorsInfo(serviceDict, systemEncoding);
         CFRelease(serviceDict);
@@ -145,29 +172,8 @@ int pollADT746XChipViaI2C() {
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
-        io_name_t className;
-        kr = IOObjectGetClass(service, className);
-        if(kr == KERN_SUCCESS)
-            printf("Found I2C controller with class name %s\n", className);
-
-        CFMutableDictionaryRef dictRef;
-        kr = IORegistryEntryCreateCFProperties(service, &dictRef, kCFAllocatorDefault, kNilOptions);
-        if(kr == KERN_SUCCESS) {
-                CFShow(dictRef);
-                CFRelease(dictRef);
-        }
-
-        io_string_t device_path, service_path;
-        kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
-        if(kr == KERN_SUCCESS)
-            printf("\tFound I2C controller with path %s\n", device_path);
-
-        kr = IORegistryEntryGetPath(service, kIOServicePlane, service_path);
-        if(kr == KERN_SUCCESS)
-            printf("\tFound I2C controller with path %s\n", service_path);
-
+        printIORegistryEntryInfo(service);
         testUserClient(service);
-
         IOObjectRelease(service);
     }
 
