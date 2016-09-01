@@ -1,6 +1,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <IOKit/IOKitLib.h>
 #include "IOI2C.h"
+#include "IOI2CDefs.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONameMatchI2C "i2c" //PPCI2C name match
