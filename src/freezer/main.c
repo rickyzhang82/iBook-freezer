@@ -4,11 +4,7 @@
 #include "IOI2CDefs.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
-#define kIONameMatchI2C "i2c" //PPCI2C name match
-#define kIONameMatchI2C_BUS "i2c-bus" //PPCI2C name match
-#define kIONameMatchIOI2CPPC "uni-n-i2c-control"
-#define kIOClassValuePPCI2CInterface "PPCI2CInterface"
-#define kIOUserClientClassValueI2CUserClient "I2CUserClient"
+#define kIOI2CDevice "IOI2CDevice"
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -79,7 +75,7 @@ void printIORegistryEntryInfo(io_service_t service) {
     io_name_t className;
     kr = IOObjectGetClass(service, className);
     if(kr == KERN_SUCCESS)
-        printf("Found I2C controller with class name %s\n", className);
+        printf("Found IORegistryEntry with class name %s\n", className);
 
     CFMutableDictionaryRef dictRef;
     kr = IORegistryEntryCreateCFProperties(service, &dictRef, kCFAllocatorDefault, kNilOptions);
@@ -91,11 +87,11 @@ void printIORegistryEntryInfo(io_service_t service) {
     io_string_t device_path, service_path;
     kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
     if(kr == KERN_SUCCESS)
-        printf("\tFound I2C controller with path %s\n", device_path);
+        printf("\tFound IORegistryEntrywith path %s\n", device_path);
 
     kr = IORegistryEntryGetPath(service, kIOServicePlane, service_path);
     if(kr == KERN_SUCCESS)
-        printf("\tFound I2C controller with path %s\n", service_path);
+        printf("\tFound IORegistryEntry with path %s\n", service_path);
 
     printf("\n\nEnd printIORegistryEntryInfo--------------------\n\n");
 }
@@ -140,6 +136,8 @@ void testUserClient(io_service_t service) {
     if (kr != KERN_SUCCESS) {
         fprintf(stderr, "IOServiceOpen returned 0x%08x\n", kr);
         return;
+    } else {
+        printf("IOServiceOpen was successful.\n");
     }
 
     kr = IOServiceClose(dataPort);
@@ -152,16 +150,16 @@ void testUserClient(io_service_t service) {
 }
 
 /**
- * @brief pollADT746XChipViaI2C
+ * @brief pollFromI2C
  */
-int pollADT746XChipViaI2C() {
+int pollFromI2C() {
     io_iterator_t           iter;
     io_service_t            service = 0;
     kern_return_t           kr;
     CFMutableDictionaryRef  matchingDictionary;
 
     // Create PPC I2C interface matching dictionary
-    matchingDictionary = IOServiceNameMatching(kIONameMatchIOI2CPPC);
+    matchingDictionary = IOServiceNameMatching(kIOI2CDevice);
 
     // Create an iterator for all IO Registry objects that match the dictionary
     kr =  IOServiceGetMatchingServices(kIOMasterPortDefault,
@@ -214,6 +212,6 @@ int main (int argc, const char * argv[]) {
     printf("Poll from IOHWSensor:\n");
     pollIOHWSensor();
     printf("\nPoll from I2C bus:\n");
-    pollADT746XChipViaI2C();
+    pollFromI2C();
     return 0;
 }
