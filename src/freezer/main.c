@@ -174,7 +174,15 @@ int pollADT746XChipViaI2C() {
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
         printIORegistryEntryInfo(service);
-        testUserClient(service);
+        io_service_t            childService = 0;
+        kr = IORegistryEntryGetChildEntry(service, kIOServicePlane, &childService);
+        if(kr != KERN_SUCCESS) {
+            fprintf(stderr, "IORegistryEntryGetChildEntry returned 0x%08x\n\n", kr);
+            return -1;
+        }
+        printIORegistryEntryInfo(childService);
+        testUserClient(childService);
+        IOObjectRelease(childService);
         IOObjectRelease(service);
     }
 
