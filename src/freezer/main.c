@@ -74,6 +74,7 @@ void printSensorsInfo(const void* serviceDict, CFStringEncoding encoding) {
 }
 
 void printIORegistryEntryInfo(io_service_t service) {
+    kern_return_t           kr;
     printf("\n\nBegin printIORegistryEntryInfo--------------------\n\n");
     io_name_t className;
     kr = IOObjectGetClass(service, className);
