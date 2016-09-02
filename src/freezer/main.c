@@ -4,7 +4,10 @@
 #include "IOI2CDefs.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
-#define kIONamMatchADT7467 "adt7467"
+#define kIONamMatchADT7467 "adt7467" //ADT7467 chip name match
+#define kIOServicePathToIOI2CADT746x \
+"IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x/IOI2CADT746x""
+#define kNumVariable 3
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -87,11 +90,18 @@ void printIORegistryEntryInfo(io_service_t service) {
     io_string_t device_path, service_path;
     kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
     if(kr == KERN_SUCCESS)
-        printf("\tFound IORegistryEntrywith path %s\n", device_path);
+        printf("Found IORegistryEntrywith path %s\n", device_path);
 
     kr = IORegistryEntryGetPath(service, kIOServicePlane, service_path);
     if(kr == KERN_SUCCESS)
-        printf("\tFound IORegistryEntry with path %s\n", service_path);
+        printf("Found IORegistryEntry with path %s\n", service_path);
+    int chipNum, i2cBusNum, i2cContrlNum;
+    if(kNumVariable ==
+            sscanf(service_path, kIOServicePathToIOI2CADT746x, &chipNum, &i2cBusNum, &i2cContrlNum)) {
+        printf("found @ 0x%x\n", chipNum);
+        printf(" - Bus I2C @ 0x%x\n", i2cBusNum);
+        printf(" - Controller (%s) @ 0x%x\n", i2cContrlNum);
+    }
 
     printf("\n\nEnd printIORegistryEntryInfo--------------------\n\n");
 }
