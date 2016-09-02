@@ -6,7 +6,7 @@
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONamMatchADT7467 "adt7467" //ADT7467 chip name match
 #define kIOServicePathToIOI2CADT746x \
-"IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x/IOI2CADT746x""
+"IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x/IOI2CADT746x"
 #define kNumVariable 3
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
