@@ -8,6 +8,7 @@
 #define kIOServicePathToIOI2CADT746x \
 "IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x"
 #define kNumVariable 3
+#define SHOULD_PRINT_DICT 0
 
 #define kIOPPluginCurrentValueKey "current-value" // current measured value
 #define kIOPPluginLocationKey     "location"      // readable description
@@ -80,12 +81,14 @@ void printIORegistryEntryInfo(io_service_t service) {
     if(kr == KERN_SUCCESS)
         printf("Found IORegistryEntry with class name %s\n", className);
 
+#if SHOULD_PRINT_DICT == 1
     CFMutableDictionaryRef dictRef;
     kr = IORegistryEntryCreateCFProperties(service, &dictRef, kCFAllocatorDefault, kNilOptions);
     if(kr == KERN_SUCCESS) {
             CFShow(dictRef);
             CFRelease(dictRef);
     }
+#endif
 
     io_string_t device_path, service_path;
     kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
