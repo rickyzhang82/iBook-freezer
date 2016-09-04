@@ -2,6 +2,9 @@
 #include <IOKit/IOKitLib.h>
 #include "IOI2C.h"
 #include "IOI2CDefs.h"
+
+#define DEBUG 1
+
 #include "freezer.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
@@ -37,7 +40,7 @@
 #define SENSOR_TEMP_FMT_F(x) \
     (double)((((double)((x) >> 16) * (double)9) / (double)5) + (double)32)
 
-#define DEBUG 1
+
 
 /**
  * @brief printSensorsInfo
