@@ -288,10 +288,10 @@ int readFromI2CController(io_service_t service) {
     //unlock I2C Bus
     kr = i2cControllerUnlock(connect, clientKey);
     if (kr != KERN_SUCCESS) {
-        fprintf(stderr, "i2cControllerLock returned 0x%08x\n", kr);
+        fprintf(stderr, "i2cControllerUnlock returned 0x%08x\n", kr);
         goto ERROR_RELEASE_SERVICE;
     } else {
-        D(printf("i2cControllerLock was successful.\n"));
+        D(printf("i2cControllerUnlock was successful.\n"));
     }
 
     //close user client of I2CControllerPPC
