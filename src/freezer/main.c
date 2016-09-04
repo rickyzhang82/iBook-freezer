@@ -163,11 +163,11 @@ void testUserClient(io_service_t service) {
 }
 
 int isFoundIOI2CADT746x(io_service_t parent_service) {
+    kern_return_t           kr;
     io_service_t            childService = 0;
     kr = IORegistryEntryGetChildEntry(parent_service, kIOServicePlane, &childService);
     if(kr != KERN_SUCCESS) {
         fprintf(stderr, "IORegistryEntryGetChildEntry returned 0x%08x\n\n", kr);
-        IOObjectRelease(iter);
         return -1;
     }
 
@@ -184,6 +184,8 @@ int isFoundIOI2CADT746x(io_service_t parent_service) {
         IOObjectRelease(childService);
         return -1;
     }
+    
+    printf("Found class %s\n", className);
 
     io_string_t service_path;
     kr = IORegistryEntryGetPath(childService, kIOServicePlane, service_path);
@@ -225,7 +227,6 @@ int pollFromI2C() {
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
-        printIORegistryEntryInfo(service);
         int busNum = isFoundIOI2CADT746x(service);
         IOObjectRelease(service);
     }
