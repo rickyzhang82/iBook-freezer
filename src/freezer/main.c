@@ -207,6 +207,7 @@ int isFoundIOI2CADT746x(io_service_t parentService) {
 }
 
 io_service_t matchI2CControllerService(io_service_t service) {
+    kern_return_t           kr;
     io_service_t childService = service;
     io_service_t parentService = 0;
     io_name_t className;
@@ -252,6 +253,8 @@ int readFromI2CController(io_service_t service) {
         fprintf(stderr, "Failed to find I2CControllerPPC\n\n");
         return -1;
     }
+    
+    return 0;
 }
 
 /**
