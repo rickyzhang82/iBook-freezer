@@ -37,7 +37,7 @@
 #define SENSOR_TEMP_FMT_F(x) \
     (double)((((double)((x) >> 16) * (double)9) / (double)5) + (double)32)
 
-//#define DEBUG 1
+#define DEBUG 1
 
 /**
  * @brief printSensorsInfo
@@ -85,42 +85,6 @@ void printSensorsInfo(const void* serviceDict, CFStringEncoding encoding) {
     }
 }
 
-void printIORegistryEntryInfo(io_service_t service) {
-    kern_return_t           kr;
-    printf("\n\nBegin printIORegistryEntryInfo--------------------\n\n");
-    io_name_t className;
-    kr = IOObjectGetClass(service, className);
-    if(kr == KERN_SUCCESS)
-        printf("Found IORegistryEntry with class name %s\n", className);
-
-#if SHOULD_PRINT_DICT == 1
-    CFMutableDictionaryRef dictRef;
-    kr = IORegistryEntryCreateCFProperties(service, &dictRef, kCFAllocatorDefault, kNilOptions);
-    if(kr == KERN_SUCCESS) {
-            CFShow(dictRef);
-            CFRelease(dictRef);
-    }
-#endif
-
-    io_string_t device_path, service_path;
-    kr = IORegistryEntryGetPath(service, kIODeviceTreePlane, device_path);
-    if(kr == KERN_SUCCESS)
-        printf("Found IORegistryEntrywith path %s\n", device_path);
-
-    kr = IORegistryEntryGetPath(service, kIOServicePlane, service_path);
-    if(kr == KERN_SUCCESS)
-        printf("Found IORegistryEntry with path %s\n", service_path);
-    int chipNum, i2cBusNum, i2cContrlNum;
-    if(kNumVariable ==
-            sscanf(service_path, kIOServicePathToIOI2CADT746x, &chipNum, &i2cBusNum, &i2cContrlNum)) {
-        printf("found @ 0x%x\n", chipNum);
-        printf(" - Bus I2C @ 0x%x\n", i2cBusNum);
-        printf(" - Controller @ 0x%x\n", i2cContrlNum);
-    }
-
-    printf("\n\nEnd printIORegistryEntryInfo--------------------\n\n");
-}
-
 /**
  * @brief pollIOHWSensor Poll I/O hardware sensor reading
  */
@@ -151,26 +115,6 @@ int pollIOHWSensor() {
     
     IOObjectRelease(iter);
     return 0;
-}
-
-void testUserClient(io_service_t service) {
-    kern_return_t           kr;
-    io_connect_t            dataPort;
-    kr = IOServiceOpen(service, mach_task_self(), kIOI2CUserClientType, &dataPort);
-    if (kr != KERN_SUCCESS) {
-        fprintf(stderr, "IOServiceOpen returned 0x%08x\n", kr);
-        return;
-    } else {
-        printf("IOServiceOpen was successful.\n");
-    }
-
-    kr = IOServiceClose(dataPort);
-    if (kr == KERN_SUCCESS) {
-        printf("IOServiceClose was successful.\n\n");
-    }
-    else {
-        fprintf(stderr, "IOServiceClose returned 0x%08x\n\n", kr);
-    }
 }
 
 int isFoundIOI2CADT746x(io_service_t parentService) {
@@ -248,7 +192,7 @@ io_service_t matchI2CControllerService(io_service_t service) {
 }
 
 kern_return_t i2cControllerOpen(io_service_t service, io_connect_t *connect) {
-    return IOServiceOpen(service, mach_task_self(), 0, connect);
+    return IOServiceOpen(service, mach_task_self(), kIOI2CUserClientType, connect);
 }
 
 kern_return_t i2cControllerClose(io_connect_t connect) {
