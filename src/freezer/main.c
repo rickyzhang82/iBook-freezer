@@ -2,6 +2,7 @@
 #include <IOKit/IOKitLib.h>
 #include "IOI2C.h"
 #include "IOI2CDefs.h"
+#include "freezer.h"
 
 #define kIOHWSensor "IOHWSensor" //IOHWSensor name match
 #define kIONamMatchADT7467 "adt7467" //ADT7467 chip name match
@@ -28,6 +29,8 @@
 // macro to convert sensor temperature format (16.16) to integer (Fahrenheit)
 #define SENSOR_TEMP_FMT_F(x) \
     (double)((((double)((x) >> 16) * (double)9) / (double)5) + (double)32)
+
+//#define DEBUG 1
 
 /**
  * @brief printSensorsInfo
@@ -186,12 +189,12 @@ int isFoundIOI2CADT746x(io_service_t parentService) {
         return -1;
     }
     
-    printf("Found class %s\n", className);
+    D(printf("Found class %s\n", className));
 
     io_string_t service_path;
     kr = IORegistryEntryGetPath(childService, kIOServicePlane, service_path);
     if(kr == KERN_SUCCESS)
-        printf("Found IORegistryEntry with path %s\n", service_path);
+        D(printf("Found IORegistryEntry with path %s\n", service_path));
     int chipNum, i2cBusNum, i2cContrlNum;
     if(kNumVariable !=
             sscanf(service_path, kIOServicePathToIOI2CADT746x, &chipNum, &i2cBusNum, &i2cContrlNum)) {
@@ -225,7 +228,7 @@ io_service_t matchI2CControllerService(io_service_t service) {
             return 0;
         }
 
-        printf("Found parent service with class name %s\n", className);
+        D(printf("Found parent service with class name %s\n", className));
 
         if(childService != service)
             IOObjectRelease(childService);
