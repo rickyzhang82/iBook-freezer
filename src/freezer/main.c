@@ -8,6 +8,7 @@
 #define kIOServicePathToIOI2CADT746x \
 "IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x"
 #define kIOI2CADT746xClassName "IOI2CADT746x"
+#define kIOI2CControllerPPCClassname "IOI2CControllerPPC"
 #define kNumVariable 3
 #define SHOULD_PRINT_DICT 0
 
@@ -162,10 +163,10 @@ void testUserClient(io_service_t service) {
     }
 }
 
-int isFoundIOI2CADT746x(io_service_t parent_service) {
+int isFoundIOI2CADT746x(io_service_t parentService) {
     kern_return_t           kr;
     io_service_t            childService = 0;
-    kr = IORegistryEntryGetChildEntry(parent_service, kIOServicePlane, &childService);
+    kr = IORegistryEntryGetChildEntry(parentService, kIOServicePlane, &childService);
     if(kr != KERN_SUCCESS) {
         fprintf(stderr, "IORegistryEntryGetChildEntry returned 0x%08x\n\n", kr);
         return -1;
@@ -205,6 +206,54 @@ int isFoundIOI2CADT746x(io_service_t parent_service) {
     return i2cBusNum;
 }
 
+io_service_t matchI2CControllerService(io_service_t service) {
+    io_service_t childService = service;
+    io_service_t parentService = 0;
+    io_name_t className;
+
+    do {
+        kr = IORegistryEntryGetParentEntry(childService, kIOServicePlane, &parentService);
+        if(kr != KERN_SUCCESS) {
+            fprintf(stderr, "IORegistryEntryGetParentEntry returned 0x%08x\n\n", kr);
+            return 0;
+        }
+
+        kr = IOObjectGetClass(parentService, className);
+        if(kr != KERN_SUCCESS) {
+            fprintf(stderr, "IOObjectGetClass returned 0x%08x\n\n", kr);
+            return 0;
+        }
+
+        printf("Found parent service with class name %s\n", className);
+
+        if(childService != service)
+            IOObjectRelease(childService);
+
+        childService = parentService;
+
+    } while(0 != strcmp(className, kIOI2CControllerPPCClassname));
+
+    return parentService;
+}
+
+int readFromI2CController(io_service_t service) {
+    //get I2C bus number
+    int busNum = isFoundIOI2CADT746x(service);
+
+    if(-1 == busNum){
+        fprintf(stderr, "Failed to find i2c bus\n\n");
+        return -1;
+    }
+
+    //match I2CControllerPPC
+    io_service_t i2cControllerService = matchI2CControllerService(service);
+
+    if(0 == i2cControllerService){
+        fprintf(stderr, "Failed to find I2CControllerPPC\n\n");
+        return -1;
+    }
+}
+
 /**
  * @brief pollFromI2C
  */
@@ -227,7 +276,7 @@ int pollFromI2C() {
 
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
-        int busNum = isFoundIOI2CADT746x(service);
+        readFromI2CController(service);
         IOObjectRelease(service);
     }
 
