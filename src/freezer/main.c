@@ -10,6 +10,13 @@
 "IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x"
 #define kIOI2CADT746xClassName "IOI2CADT746x"
 #define kIOI2CControllerPPCClassname "IOI2CControllerPPC"
+
+#define kMethodIndexLockI2CBus              0
+#define kMethodIndexUnlockI2CBus            1
+#define kMethodIndexReadI2CBus              2
+#define kMethodIndexWriteI2CBus             3
+#define kMethodIndexReadModifyWriteI2CBus   4
+
 #define kNumVariable 3
 #define SHOULD_PRINT_DICT 0
 
@@ -240,7 +247,63 @@ io_service_t matchI2CControllerService(io_service_t service) {
     return parentService;
 }
 
+kern_return_t i2cControllerOpen(io_service_t service, io_connect_t *connect) {
+    return IOServiceOpen(service, mach_task_self(), 0, connect);
+}
+
+kern_return_t i2cControllerClose(io_connect_t connect) {
+    return IOServiceClose(connect);
+}
+
+kern_return_t i2cControllerLock(io_connect_t        connect,
+                                UInt32              bus,
+                                UInt32              *clientKeyRef) {
+    return IOConnectMethodScalarIScalarO(connect,
+                                         kMethodIndexLockI2CBus,
+                                         1,
+                                         1,
+                                         bus,
+                                         clientKeyRef);
+}
+
+kern_return_t i2cControllerUnlock(io_connect_t      connect,
+                                  UInt32            clientKey) {
+    return IOConnectMethodScalarIScalarO(connect,
+                                         kMethodIndexUnlockI2CBus,
+                                         1,
+                                         0,
+                                         clientKey);
+}
+
+kern_return_t i2cControllerRead(io_connect_t        connect,
+                                I2CUserReadInput*   input,
+                                IOByteCount*        structureOutputSize,
+                                I2CUserReadOutput*  output) {
+    return IOConnectMethodStructureIStructureO(connect,
+                                         kMethodIndexReadI2CBus,
+                                         sizeof(*input),
+                                         structureOutputSize,
+                                         input,
+                                         output);
+}
+
+kern_return_t i2cControllerWrite(io_connect_t        connect,
+                                I2CUserWriteInput*   input,
+                                IOByteCount*        structureOutputSize,
+                                I2CUserWriteOutput*  output) {
+    return IOConnectMethodStructureIStructureO(connect,
+                                         kMethodIndexWriteI2CBus,
+                                         sizeof(*input),
+                                         structureOutputSize,
+                                         input,
+                                         output);
+}
+
 int readFromI2CController(io_service_t service) {
+    kern_return_t           kr;
+    io_connect_t            connect;
+    UInt32                  clientKey;
+    io_service_t            i2cControllerService = 0;
     //get I2C bus number
     int busNum = isFoundIOI2CADT746x(service);
 
@@ -250,14 +313,56 @@ int readFromI2CController(io_service_t service) {
     }
 
     //match I2CControllerPPC
-    io_service_t i2cControllerService = matchI2CControllerService(service);
+    i2cControllerService = matchI2CControllerService(service);
 
     if(0 == i2cControllerService){
         fprintf(stderr, "Failed to find I2CControllerPPC\n\n");
         return -1;
     }
-    
+
+    //open user client of I2CControllerPPC
+    kr = i2cControllerOpen(i2cControllerService, &connect);
+    if (kr != KERN_SUCCESS) {
+        fprintf(stderr, "IOServiceOpen returned 0x%08x\n", kr);
+        goto ERROR_RELEASE_SERVICE;
+    } else {
+        D(printf("IOServiceOpen was successful.\n"));
+    }
+
+    //lock I2C Bus
+    kr = i2cControllerLock(connect, busNum, &clientKey);
+    if (kr != KERN_SUCCESS) {
+        fprintf(stderr, "i2cControllerLock returned 0x%08x\n", kr);
+        goto ERROR_RELEASE_SERVICE;
+    } else {
+        D(printf("i2cControllerLock was successful.\n"));
+    }
+
+    //unlock I2C Bus
+    kr = i2cControllerUnlock(connect, clientKey);
+    if (kr != KERN_SUCCESS) {
+        fprintf(stderr, "i2cControllerLock returned 0x%08x\n", kr);
+        goto ERROR_RELEASE_SERVICE;
+    } else {
+        D(printf("i2cControllerLock was successful.\n"));
+    }
+
+    //close user client of I2CControllerPPC
+    kr = i2cControllerClose(connect);
+    if (kr == KERN_SUCCESS) {
+        D(printf("IOServiceClose was successful.\n\n"));
+    }
+    else {
+        fprintf(stderr, "IOServiceClose returned 0x%08x\n\n", kr);
+        goto ERROR_RELEASE_SERVICE;
+    }
+
+    IOObjectRelease(i2cControllerService);
     return 0;
+
+ERROR_RELEASE_SERVICE:
+    IOObjectRelease(i2cControllerService);
+    return -1;
 }
 
 /**
