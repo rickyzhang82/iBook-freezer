@@ -7,6 +7,7 @@
 #define kIONamMatchADT7467 "adt7467" //ADT7467 chip name match
 #define kIOServicePathToIOI2CADT746x \
 "IOService:/MacRISC2PE/uni-n@f8000000/AppleUniN/i2c@%x/IOI2CControllerPPC/i2c-bus@%x/IOI2CBus/fan@%x"
+#define kIOI2CADT746xClassName "IOI2CADT746x"
 #define kNumVariable 3
 #define SHOULD_PRINT_DICT 0
 
@@ -161,6 +162,47 @@ void testUserClient(io_service_t service) {
     }
 }
 
+int isFoundIOI2CADT746x(io_service_t parent_service) {
+    io_service_t            childService = 0;
+    kr = IORegistryEntryGetChildEntry(parent_service, kIOServicePlane, &childService);
+    if(kr != KERN_SUCCESS) {
+        fprintf(stderr, "IORegistryEntryGetChildEntry returned 0x%08x\n\n", kr);
+        IOObjectRelease(iter);
+        return -1;
+    }
+
+    io_name_t className;
+    kr = IOObjectGetClass(childService, className);
+    if(kr != KERN_SUCCESS) {
+        fprintf(stderr, "IOObjectGetClass returned 0x%08x\n\n", kr);
+        IOObjectRelease(childService);
+        return -1;
+    }
+
+    //found IOI2CADT746x class
+    if(0 != strcmp(className, kIOI2CADT746xClassName)) {
+        IOObjectRelease(childService);
+        return -1;
+    }
+
+    io_string_t service_path;
+    kr = IORegistryEntryGetPath(childService, kIOServicePlane, service_path);
+    if(kr == KERN_SUCCESS)
+        printf("Found IORegistryEntry with path %s\n", service_path);
+    int chipNum, i2cBusNum, i2cContrlNum;
+    if(kNumVariable !=
+            sscanf(service_path, kIOServicePathToIOI2CADT746x, &chipNum, &i2cBusNum, &i2cContrlNum)) {
+        IOObjectRelease(childService);
+        return -1;
+    }
+
+    printf("found @ 0x%x\n", chipNum);
+    printf(" - Bus I2C @ 0x%x\n", i2cBusNum);
+    printf(" - Controller @ 0x%x\n", i2cContrlNum);
+    IOObjectRelease(childService);
+    return i2cBusNum;
+}
+
 /**
  * @brief pollFromI2C
  */
@@ -170,7 +212,7 @@ int pollFromI2C() {
     kern_return_t           kr;
     CFMutableDictionaryRef  matchingDictionary;
 
-    // Create PPC I2C interface matching dictionary
+    // Create adt7467 name matching dictionary
     matchingDictionary = IOServiceNameMatching(kIONamMatchADT7467);
 
     // Create an iterator for all IO Registry objects that match the dictionary
@@ -184,17 +226,7 @@ int pollFromI2C() {
     // Iterate over all matching objects
     while((service = IOIteratorNext(iter)) != IO_OBJECT_NULL) {
         printIORegistryEntryInfo(service);
-        io_service_t            childService = 0;
-        kr = IORegistryEntryGetChildEntry(service, kIOServicePlane, &childService);
-        if(kr != KERN_SUCCESS) {
-            fprintf(stderr, "IORegistryEntryGetChildEntry returned 0x%08x\n\n", kr);
-            return -1;
-        }
-        printf("Begin Child Service ---------------------------------\n");
-        printIORegistryEntryInfo(childService);
-        printf("End Child Service   ---------------------------------\n");
-        testUserClient(childService);
-        IOObjectRelease(childService);
+        int busNum = isFoundIOI2CADT746x(service);
         IOObjectRelease(service);
     }
 
