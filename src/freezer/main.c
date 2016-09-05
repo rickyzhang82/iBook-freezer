@@ -14,12 +14,6 @@
 #define kIOI2CADT746xClassName "IOI2CADT746x"
 #define kIOI2CControllerPPCClassname "IOI2CControllerPPC"
 
-#define kMethodIndexLockI2CBus              0
-#define kMethodIndexUnlockI2CBus            1
-#define kMethodIndexReadI2CBus              2
-#define kMethodIndexWriteI2CBus             3
-#define kMethodIndexReadModifyWriteI2CBus   4
-
 #define kNumVariable 3
 #define SHOULD_PRINT_DICT 0
 
@@ -206,7 +200,7 @@ kern_return_t i2cControllerLock(io_connect_t        connect,
                                 UInt32              bus,
                                 UInt32              *clientKeyRef) {
     return IOConnectMethodScalarIScalarO(connect,
-                                         kMethodIndexLockI2CBus,
+                                         kI2CUCLock,
                                          1,
                                          1,
                                          bus,
@@ -216,7 +210,7 @@ kern_return_t i2cControllerLock(io_connect_t        connect,
 kern_return_t i2cControllerUnlock(io_connect_t      connect,
                                   UInt32            clientKey) {
     return IOConnectMethodScalarIScalarO(connect,
-                                         kMethodIndexUnlockI2CBus,
+                                         kI2CUCUnlock,
                                          1,
                                          0,
                                          clientKey);
@@ -227,7 +221,7 @@ kern_return_t i2cControllerRead(io_connect_t        connect,
                                 IOByteCount*        structureOutputSize,
                                 I2CUserReadOutput*  output) {
     return IOConnectMethodStructureIStructureO(connect,
-                                         kMethodIndexReadI2CBus,
+                                         kI2CUCRead,
                                          sizeof(*input),
                                          structureOutputSize,
                                          input,
@@ -239,7 +233,7 @@ kern_return_t i2cControllerWrite(io_connect_t        connect,
                                 IOByteCount*        structureOutputSize,
                                 I2CUserWriteOutput*  output) {
     return IOConnectMethodStructureIStructureO(connect,
-                                         kMethodIndexWriteI2CBus,
+                                         kI2CUCWrite,
                                          sizeof(*input),
                                          structureOutputSize,
                                          input,
